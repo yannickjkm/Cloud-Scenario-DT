@@ -77,7 +77,7 @@ output "security-group" {
   value = aws_iam_group.security-team.id
 }
 
-// create policies for FINANCE Group
+// create policies for SECURITY Group
 
 
 resource "aws_iam_group_policy_attachment" "security-team-policy" {
@@ -86,7 +86,10 @@ resource "aws_iam_group_policy_attachment" "security-team-policy" {
     "arn:aws:iam::aws:policy/IAMFullAccess",
     "arn:aws:iam::aws:policy/CloudWatchFullAccess",
     "arn:aws:iam::aws:policy/AmazonEC2FullAccess",
-    "arn:aws:iam::aws:policy/AWSSecurityHubFullAccess"
+    "arn:aws:iam::aws:policy/AWSSecurityHubFullAccess",
+    "arn:aws:iam::aws:policy/AWSCloudTrail_FullAccess",
+    "arn:aws:iam::aws:policy/AmazonS3FullAccess",
+    "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
 
   ])
 
