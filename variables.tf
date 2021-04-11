@@ -5,3 +5,7 @@ variable "username-dev" {
     default = ["devuser1","devuser2"]
 }
 
+variable "username-finance" {
+    type = list
+    default = ["financeuser1","financeuser2"]
+}

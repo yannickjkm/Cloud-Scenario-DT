@@ -35,7 +35,7 @@ resource "aws_iam_access_key" "dev-users" {
   user = aws_iam_user.dev-users.*.name[count.index]
 }
 
-// adding users to the DEV group
+// Adding users to the DEV group
 
 resource "aws_iam_user_group_membership" "members-dev" {
   count = length(var.username-dev)
@@ -50,6 +50,43 @@ resource "aws_iam_user_group_membership" "members-dev" {
 # ===========================
 #     FINANCE DEPARTMENT
 # ===========================
+
+// call the FINANCE variable username
+
+variable "username-finance" {}
+
+
+// create FINANCE IAM users
+
+resource "aws_iam_user" "finance-users" {
+  count = length(var.username-finance)
+  name = element(var.username-finance, count.index)
+  
+
+  tags = {
+    tag-key = "FINANCE-TEAM"
+  }
+}
+
+
+// Create access key for DEV users
+
+resource "aws_iam_access_key" "finance-users" {
+  count = length(var.username-finance)                          
+  user = aws_iam_user.finance-users.*.name[count.index]
+}
+
+
+// Adding users to the FINANCE group
+
+resource "aws_iam_user_group_membership" "members-finance" {
+  count = length(var.username-finance)
+  user = aws_iam_user.finance-users.*.name[count.index]
+
+  groups = [
+    module.groups_module.finance-group,      
+  ]
+}
 
 
 # ===========================

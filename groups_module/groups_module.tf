@@ -33,3 +33,32 @@ resource "aws_iam_group_policy_attachment" "dev-team-policy" {
 
 
 
+
+# ===========================
+#      FINANCE DEPARTMENT
+# ===========================
+
+
+//  create FINANCE IAM Groups
+
+resource "aws_iam_group" "finance-team" {
+  name = "FINANCE"
+}
+
+output "finance-group" {
+  value = aws_iam_group.finance-team.id
+}
+
+
+// create policies for FINANCE Group
+
+
+resource "aws_iam_group_policy_attachment" "finance-team-policy" {
+  for_each = toset([
+    "arn:aws:iam::aws:policy/AWSOrganizationsFullAccess", 
+    "arn:aws:iam::aws:policy/job-function/Billing"
+  ])
+
+  group = aws_iam_group.finance-team.name
+  policy_arn = each.value
+}
