@@ -12,5 +12,6 @@ provider "aws" {
 module "users_module" {
     source = "./users_module"
     username-dev = var.username-dev
-    username-finance = var.username-finance 
+    username-finance = var.username-finance
+    username-security = var.username-security 
 }

@@ -32,8 +32,6 @@ resource "aws_iam_group_policy_attachment" "dev-team-policy" {
 }
 
 
-
-
 # ===========================
 #      FINANCE DEPARTMENT
 # ===========================
@@ -60,5 +58,38 @@ resource "aws_iam_group_policy_attachment" "finance-team-policy" {
   ])
 
   group = aws_iam_group.finance-team.name
+  policy_arn = each.value
+}
+
+
+# ===========================
+#      SECURITY DEPARTMENT
+# ===========================
+
+
+//  create SECURITY IAM Groups
+
+resource "aws_iam_group" "security-team" {
+  name = "SECURITY"
+}
+
+output "security-group" {
+  value = aws_iam_group.security-team.id
+}
+
+// create policies for FINANCE Group
+
+
+resource "aws_iam_group_policy_attachment" "security-team-policy" {
+  for_each = toset([
+    "arn:aws:iam::aws:policy/AmazonGuardDutyFullAccess", 
+    "arn:aws:iam::aws:policy/IAMFullAccess",
+    "arn:aws:iam::aws:policy/CloudWatchFullAccess",
+    "arn:aws:iam::aws:policy/AmazonEC2FullAccess",
+    "arn:aws:iam::aws:policy/AWSSecurityHubFullAccess"
+
+  ])
+
+  group = aws_iam_group.security-team.name
   policy_arn = each.value
 }

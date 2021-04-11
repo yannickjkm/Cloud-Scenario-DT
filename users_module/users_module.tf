@@ -51,6 +51,7 @@ resource "aws_iam_user_group_membership" "members-dev" {
 #     FINANCE DEPARTMENT
 # ===========================
 
+
 // call the FINANCE variable username
 
 variable "username-finance" {}
@@ -69,7 +70,7 @@ resource "aws_iam_user" "finance-users" {
 }
 
 
-// Create access key for DEV users
+// Create access key for FINANCE users
 
 resource "aws_iam_access_key" "finance-users" {
   count = length(var.username-finance)                          
@@ -92,3 +93,39 @@ resource "aws_iam_user_group_membership" "members-finance" {
 # ===========================
 #     SECURITY DEPARTMENT
 # ===========================
+
+// call the SECURITY variable username
+
+variable "username-security" {}
+
+
+// create SECURITY IAM users
+
+resource "aws_iam_user" "security-users" {
+  count = length(var.username-security)
+  name = element(var.username-security, count.index)
+  
+
+  tags = {
+    tag-key = "SECURITY-TEAM"
+  }
+}
+
+// Create access key for SECURITY users
+
+resource "aws_iam_access_key" "security-users" {
+  count = length(var.username-security)                          
+  user = aws_iam_user.security-users.*.name[count.index]
+}
+
+
+// Adding users to the SECURITY group
+
+resource "aws_iam_user_group_membership" "members-security" {
+  count = length(var.username-security)
+  user = aws_iam_user.security-users.*.name[count.index]
+
+  groups = [
+    module.groups_module.security-group,      
+  ]
+}
